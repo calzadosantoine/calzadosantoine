@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calzados Antoine - Tienda Oficial</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #2b2b2b;
+        }
+
+        /* Encabezado */
+        header {
+            background-color: #121212;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: #d4af37;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-admin-nav {
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-admin-nav:hover {
+            background: #d4af37;
+            color: #121212;
+        }
+
+        .cart-icon-btn {
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            font-size: 1.4rem;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-count {
+            background-color: #d4af37;
+            color: #121212;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 2px 6px;
+            position: absolute;
+            top: -8px;
+            right: -10px;
+        }
+
+        /* Banner Hero */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .hero h1 { font-size: 2.2rem; letter-spacing: 2px; }
+
+        /* Buscador y Filtros */
+        .controls-container {
+            max-width: 1200px;
+            margin: 2rem auto 1rem;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-filter {
+            background: #fff;
+            border: 1px solid #d4af37;
+            color: #121212;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-filter.active, .btn-filter:hover {
+            background: #d4af37;
+            color: #121212;
+        }
+
+        /* Catálogo */
+        .container {
+            max-width: 1200px;
+            margin: 1rem auto 3rem;
+            padding: 0 1rem;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .producto-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+        }
+
+        .producto-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .producto-info {
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .producto-sku { font-size: 0.8rem; color: #777; text-transform: uppercase; }
+        .producto-nombre {
+            font-size: 1.05rem;
+            margin: 0.4rem 0;
+            color: #121212;
+            min-height: 2.8em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .producto-precio { font-size: 1.15rem; color: #b8860b; font-weight: bold; margin-bottom: 0.8rem; }
+        
+        .btn-ver-mas {
+            background-color: #121212;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .load-more-container { text-align: center; margin-top: 2.5rem; }
+        .btn-load-more {
+            background: #121212; color: #d4af37; border: 1px solid #d4af37;
+            padding: 0.8rem 2rem; font-size: 1rem; font-weight: bold; border-radius: 25px; cursor: pointer;
+        }
+
+        /* MODAL PRODUCTO DETALLE */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); display: none;
+            justify-content: center; align-items: center; z-index: 3000; padding: 1rem;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: #fff; border-radius: 8px; max-width: 800px; width: 100%;
+            overflow: hidden; display: flex; position: relative;
+        }
+
+        @media (max-width: 768px) { .modal-content { flex-direction: column; max-height: 90vh; overflow-y: auto; } }
+
+        .modal-close {
+            position: absolute; top: 10px; right: 15px; background: rgba(0,0,0,0.5);
+            color: #fff; border: none; font-size: 1.8rem; width: 36px; height: 36px;
+            border-radius: 50%; cursor: pointer; z-index: 10;
+        }
+
+        .modal-img-container { flex: 1; background: #000; }
+        .modal-img-container img { width: 100%; height: 100%; max-height: 380px; object-fit: cover; display: block; }
+        .modal-details { flex: 1; padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+        .modal-sku { font-size: 0.85rem; color: #888; }
+        .modal-title { font-size: 1.5rem; margin: 0.5rem 0; color: #121212; }
+        .modal-desc { font-size: 0.9rem; color: #555; margin-bottom: 1rem; line-height: 1.4; }
+        .modal-price { font-size: 1.4rem; color: #b8860b; font-weight: bold; margin-bottom: 1rem; }
+
+        .qty-selector { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+        .qty-btn { background: #121212; color: #d4af37; border: none; width: 35px; height: 35px; font-size: 1.2rem; border-radius: 4px; cursor: pointer; }
+        .qty-input { font-size: 1.2rem; font-weight: bold; width: 40px; text-align: center; }
+
+        .btn-action-add {
+            background-color: #121212; color: #d4af37; border: 1px solid #d4af37;
+            padding: 0.9rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+        }
+        .btn-action-remove {
+            background-color: #ff4d4d; color: #fff; border: none;
+            padding: 0.7rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+            display: none; margin-top: 0.5rem;
+        }
+
+        /* CARRITO LATERAL */
+        .cart-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; z-index: 2000;
+        }
+        .cart-overlay.active { display: block; }
+
+        .cart-sidebar {
+            position: fixed; top: 0; right: -400px; width: 380px; max-width: 100%; height: 100%;
+            background: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 2001;
+            transition: right 0.3s ease; display: flex; flex-direction: column;
+        }
+        .cart-sidebar.active { right: 0; }
+
+        .cart-header {
+            background-color: #121212; color: #d4af37; padding: 1.2rem;
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #d4af37;
+        }
+
+        .close-cart { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 1rem; }
+
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-qty { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem; }
+        .btn-qty { background: #e0e0e0; border: none; width: 24px; height: 24px; border-radius: 3px; cursor: pointer; font-weight: bold; }
+        .btn-remove-item { background: none; border: none; color: #ff4d4d; font-size: 1.2rem; cursor: pointer; }
+
+        .cart-footer { padding: 1.5rem; background: #f8f9fa; border-top: 1px solid #ddd; }
+        .cart-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; }
+        
+        .btn-checkout {
+            background-color: #25d366; color: #fff; border: none;
+            padding: 0.9rem; border-radius: 4px; width: 100%; font-size: 1rem; font-weight: bold; cursor: pointer;
+        }
+
+        /* MODAL / PANEL DE ADMINISTRACIÓN */
+        .admin-modal-content {
+            background: #fff; border-radius: 8px; max-width: 900px; width: 100%;
+            height: 85vh; display: flex; flex-direction: column; position: relative; padding: 1.5rem;
+        }
+
+        .admin-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 1rem; border-bottom: 2px solid #d4af37;
+        }
+
+        .admin-body { flex: 1; overflow-y: auto; margin-top: 1rem; }
+
+        .admin-table {
+            width: 100%; border-collapse: collapse; font-size: 0.9rem;
+        }
+
+        .admin-table th, .admin-table td {
+            border: 1px solid #ddd; padding: 8px; text-align: left;
+        }
+
+        .admin-table th { background: #121212; color: #d4af37; }
+
+        .btn-edit-item {
+            background: #121212; color: #d4af37; border: none;
+            padding: 4px 8px; border-radius: 3px; cursor: pointer; font-weight: bold;
+        }
+
+        .btn-delete-item {
+            background: #ff4d4d; color: #fff; border: none;
+            padding: 4px 8px; border-radius: 3px; cursor: pointer; font-weight: bold; margin-left: 4px;
+        }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 0.3rem; font-size: 0.9rem; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem;
+        }
+
+        footer {
+            background-color: #121212; color: #a0a0a0; text-align: center;
+            padding: 2rem 1rem; margin-top: 4rem; border-top: 1px solid #333;
+        }
+        footer strong { color: #d4af37; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Calzados Antoine</div>
+        <nav>
+            <button class="btn-admin-nav" onclick="openAdminAuth()">⚙️ Panel Admin</button>
+            <button class="cart-icon-btn" onclick="toggleCart()">
+                🛒 <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>CALZADOS ANTOINE</h1>
+        <p>Elegancia, distinción y confort en cada paso.</p>
+    </section>
+
+    <!-- Buscador y Filtros -->
+    <div class="controls-container">
+        <input type="text" id="search-input" class="search-box" placeholder="Buscar por modelo, código, marca o color..." oninput="filterProducts()">
+        <div class="filter-buttons">
+            <button class="btn-filter active" onclick="setCategoryFilter('ALL', this)">Todos</button>
+            <button class="btn-filter" onclick="setCategoryFilter('MUJER', this)">Mujer</button>
+            <button class="btn-filter" onclick="setCategoryFilter('HOMBRE', this)">Hombre</button>
+            <button class="btn-filter" onclick="setCategoryFilter('ZAPATILLA', this)">Zapatillas</button>
+            <button class="btn-filter" onclick="setCategoryFilter('MOCASIN', this)">Mocasines</button>
+            <button class="btn-filter" onclick="setCategoryFilter('SANDALIAS', this)">Sandalias</button>
+        </div>
+    </div>
+
+    <!-- Catálogo de Productos -->
+    <main class="container">
+        <div class="catalogo" id="product-grid"></div>
+        <div class="load-more-container" id="load-more-btn-container">
+            <button class="btn-load-more" onclick="loadMoreProducts()">Cargar más productos</button>
+        </div>
+    </main>
+
+    <!-- MODAL DETALLE DE PRODUCTO -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-img-container">
+                <img id="modal-img" src="" alt="Producto">
+            </div>
+            <div class="modal-details">
+                <p class="modal-sku" id="modal-sku">CÓD: ---</p>
+                <h3 class="modal-title" id="modal-title">Nombre</h3>
+                <p class="modal-desc" id="modal-desc">Calzado de alta calidad confeccionado con materiales seleccionados para brindar máximo confort.</p>
+                <p class="modal-price" id="modal-price">$0.00</p>
+                
+                <div class="qty-selector">
+                    <span>Cantidad:</span>
+                    <button class="qty-btn" onclick="adjustModalQty(-1)">-</button>
+                    <span class="qty-input" id="modal-qty">1</span>
+                    <button class="qty-btn" onclick="adjustModalQty(1)">+</button>
+                </div>
+
+                <button class="btn-action-add" id="btn-modal-add" onclick="confirmAddToCart()">Añadir al Carrito</button>
+                <button class="btn-action-remove" id="btn-modal-remove" onclick="removeFromCartInModal()">Quitar del Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PANEL ADMINISTRACIÓN -->
+    <div class="modal-overlay" id="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-header">
+                <h2>Panel de Control - Calzados Antoine</h2>
+                <button class="modal-close" style="position:static;" onclick="closeAdminModal()">&times;</button>
+            </div>
+            
+            <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                <input type="text" id="admin-search" class="search-box" placeholder="Buscar para editar..." oninput="renderAdminTable()">
+                <button class="btn-filter active" onclick="openProductForm(null)">+ Nuevo Producto</button>
+            </div>
+
+            <div class="admin-body">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Foto</th>
+                            <th>Nombre / Modelo</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body">
+                        <!-- Carga dinámica -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORMULARIO EDICIÓN PRODUCTO -->
+    <div class="modal-overlay" id="form-modal">
+        <div class="modal-content" style="max-width: 550px; padding: 2rem; flex-direction: column;">
+            <h3 id="form-title" style="margin-bottom: 1rem; border-bottom: 2px solid #d4af37; padding-bottom: 0.5rem;">Editar Producto</h3>
+            
+            <form id="product-form" onsubmit="saveProduct(event)">
+                <input type="hidden" id="form-code-orig">
+                
+                <div class="form-group">
+                    <label>Código / SKU</label>
+                    <input type="text" id="form-code" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre del Producto</label>
+                    <input type="text" id="form-name" required>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Precio ($)</label>
+                        <input type="number" step="0.01" id="form-price" required>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Género</label>
+                        <select id="form-gender">
+                            <option value="Mujer">Mujer</option>
+                            <option value="Hombre">Hombre</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL de Imagen (Link)</label>
+                    <input type="text" id="form-img" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción / Detalles</label>
+                    <textarea id="form-desc" rows="3"></textarea>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                    <button type="button" class="btn-filter" onclick="document.getElementById('form-modal').classList.remove('active')">Cancelar</button>
+                    <button type="submit" class="btn-filter active">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CARRITO LATERAL -->
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">$0.00</span>
+            </div>
+            <button class="btn-checkout" onclick="checkoutWhatsApp()">Finalizar Pedido por WhatsApp</button>
+        </div>
+    </aside>
+
+    <footer>
+        <p>&copy; 2026 <strong>Calzados Antoine</strong>. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const WHATSAPP_PHONE = "5491112345678";
+        const ADMIN_PASSWORD = "1234"; // Clave de acceso al panel
+
+        // Catálogo Base Inicial
+        const rawProducts = [
+            {"code": "50-1463", "name": "Varias Cavatini Senra (Avellana)", "brand": "Cavatini", "category": "Varias", "gender": "Mujer", "color": "Avellana"},
+            {"code": "58-1601", "name": "Varias Cavatini Casily (Arena)", "brand": "Cavatini", "category": "Varias", "gender": "Mujer", "color": "Arena"},
+            {"code": "58-1526", "name": "Sandalias Cavatini Cedar (Chocolate)", "brand": "Cavatini", "category": "Sandalias", "gender": "Mujer", "color": "Chocolate"},
+            {"code": "39-1314 45 001", "name": "Varias Cavatini Brendi (Flor Comb Negro)", "brand": "Cavatini", "category": "Varias", "gender": "Mujer", "color": "Flor Comb Negro"},
+            {"code": "39-264 45 066", "name": "Varias Cavatini Huma (Flor Comb Perla)", "brand": "Cavatini", "category": "Varias", "gender": "Mujer", "color": "Flor Comb Perla"},
+            {"code": "70-3550", "name": "Zapato Cuero Cavatini Flor (Negro)", "brand": "Cavatini", "category": "Zapato Cuero", "gender": "Hombre", "color": "Negro"},
+            {"code": "70-3551", "name": "Zapato Cuero Cavatini Flor (Negro)", "brand": "Cavatini", "category": "Zapato Cuero", "gender": "Hombre", "color": "Negro"},
+            {"code": "70-5002", "name": "Zapatilla Cuero Cavatini Flor Cmb (Rojo)", "brand": "Cavatini", "category": "Zapatilla Cuero", "gender": "Hombre", "color": "Rojo"},
+            {"code": "70-3811", "name": "Zapato Cuero Cavatini Flor (Chocolate)", "brand": "Cavatini", "category": "Zapato Cuero", "gender": "Hombre", "color": "Chocolate"},
+            {"code": "70-3980", "name": "Mocasin Cavatini Flor (Antilope)", "brand": "Cavatini", "category": "Mocasin", "gender": "Hombre", "color": "Antilope"},
+            {"code": "801", "name": "Mocasion Febo Superconfort (Negro)", "brand": "Febo", "category": "Mocasion", "gender": "Hombre", "color": "Negro"},
+            {"code": "314", "name": "Mocacion Acordonado Febo Vestir (Negro)", "brand": "Febo", "category": "Mocacion Acordonado", "gender": "Hombre", "color": "Negro"},
+            {"code": "111", "name": "Zapatilla Cuero Febo (Marron)", "brand": "Febo", "category": "Zapatilla Cuero", "gender": "Hombre", "color": "Marron"},
+            {"code": "321", "name": "Mocasin Febo (Negro)", "brand": "Febo", "category": "Mocasin", "gender": "Hombre", "color": "Negro"},
+            {"code": "323", "name": "Mocasin Febo (Negro)", "brand": "Febo", "category": "Mocasin", "gender": "Hombre", "color": "Negro"},
+            {"code": "39-1333", "name": "Zapatilla Cavatini Hadria (Latte)", "brand": "Cavatini", "category": "Zapatilla", "gender": "Mujer", "color": "Latte"}
+        ];
+
+        let products = [];
+
+        // Inicializar almacenamiento local
+        function initData() {
+            const stored = localStorage.getItem('antoine_products');
+            if (stored) {
+                products = JSON.parse(stored);
+            } else {
+                products = rawProducts.map(p => {
+                    let img = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80";
+                    const cat = p.category.toUpperCase();
+                    if (cat.includes("SANDALIA")) img = "https://images.unsplash.com/photo-1562273138-f46be4ebdf33?auto=format&fit=crop&w=600&q=80";
+                    else if (cat.includes("MOCASIN") || cat.includes("MOCASION")) img = "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80";
+                    
+                    return {
+                        ...p,
+                        price: 0.00,
+                        img: img,
+                        description: `Calzado ${p.brand} modelo ${p.name}. Confeccionado en materiales seleccionados para mayor confort.`
+                    };
+                });
+                saveToLocalStorage();
+            }
+            filteredList = [...products];
+            renderProducts();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('antoine_products', JSON.stringify(products));
+        }
+
+        let cart = [];
+        let filteredList = [];
+        let visibleCount = 12;
+        let activeProduct = null;
+        let selectedQty = 1;
+        let currentFilter = 'ALL';
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            const itemsToShow = filteredList.slice(0, visibleCount);
+
+            if (itemsToShow.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#888; margin: 2rem 0;">No se encontraron productos.</p>';
+            } else {
+                itemsToShow.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'producto-card';
+                    card.onclick = () => openModal(p.code);
+                    card.innerHTML = `
+                        <img src="${p.img}" alt="${p.name}">
+                        <div class="producto-info">
+                            <p class="producto-sku">CÓD: ${p.code}</p>
+                            <h3 class="producto-nombre">${p.name}</h3>
+                            <p class="producto-precio">$${parseFloat(p.price).toFixed(2)}</p>
+                            <button class="btn-ver-mas">Ver Detalle / Comprar</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            document.getElementById('load-more-btn-container').style.display = 
+                (visibleCount >= filteredList.length) ? 'none' : 'block';
+        }
+
+        function loadMoreProducts() {
+            visibleCount += 12;
+            renderProducts();
+        }
+
+        function setCategoryFilter(category, btnElement) {
+            currentFilter = category;
+            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+
+            filteredList = products.filter(p => {
+                const matchesQuery = p.name.toLowerCase().includes(query) || 
+                                     p.code.toLowerCase().includes(query) || 
+                                     (p.color && p.color.toLowerCase().includes(query));
+
+                let matchesCat = true;
+                if (currentFilter === 'MUJER') matchesCat = p.gender.toUpperCase() === 'MUJER';
+                else if (currentFilter === 'HOMBRE') matchesCat = p.gender.toUpperCase().includes('HOMBRE');
+                else if (currentFilter !== 'ALL') matchesCat = p.category && p.category.toUpperCase().includes(currentFilter);
+
+                return matchesQuery && matchesCat;
+            });
+
+            visibleCount = 12;
+            renderProducts();
+        }
+
+        /* Modal Vista Detallada */
+        function openModal(code) {
+            activeProduct = products.find(p => p.code === code);
+            if (!activeProduct) return;
+
+            const cartItem = cart.find(i => i.code === code);
+            selectedQty = cartItem ? cartItem.qty : 1;
+
+            document.getElementById('modal-img').src = activeProduct.img;
+            document.getElementById('modal-sku').textContent = `CÓD: ${activeProduct.code}`;
+            document.getElementById('modal-title').textContent = activeProduct.name;
+            document.getElementById('modal-desc').textContent = activeProduct.description || "Sin descripción disponible.";
+            document.getElementById('modal-price').textContent = `$${parseFloat(activeProduct.price).toFixed(2)}`;
+            document.getElementById('modal-qty').textContent = selectedQty;
+
+            const btnRemove = document.getElementById('btn-modal-remove');
+            const btnAdd = document.getElementById('btn-modal-add');
+
+            if (cartItem) {
+                btnRemove.style.display = 'block';
+                btnAdd.textContent = 'Actualizar Cantidad';
+            } else {
+                btnRemove.style.display = 'none';
+                btnAdd.textContent = 'Añadir al Carrito';
+            }
+
+            document.getElementById('product-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.remove('active');
+        }
+
+        function adjustModalQty(delta) {
+            selectedQty += delta;
+            if (selectedQty < 1) selectedQty = 1;
+            document.getElementById('modal-qty').textContent = selectedQty;
+        }
+
+        function confirmAddToCart() {
+            if (!activeProduct) return;
+            const existingIndex = cart.findIndex(i => i.code === activeProduct.code);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty = selectedQty;
+            } else {
+                cart.push({ ...activeProduct, qty: selectedQty });
+            }
+            updateCartUI();
+            closeModal();
+            toggleCart();
+        }
+
+        function removeFromCartInModal() {
+            if (!activeProduct) return;
+            cart = cart.filter(i => i.code !== activeProduct.code);
+            updateCartUI();
+            closeModal();
+        }
+
+        /* Carrito */
+        function toggleCart() {
+            document.getElementById('cart-overlay').classList.toggle('active');
+            document.getElementById('cart-sidebar').classList.toggle('active');
+        }
+
+        function changeQty(code, delta) {
+            const item = cart.find(i => i.code === code);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.code !== code);
+            }
+            updateCartUI();
+        }
+
+        function removeItem(code) {
+            cart = cart.filter(i => i.code !== code);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const total = document.getElementById('cart-total-price');
+
+            container.innerHTML = '';
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#888; margin-top:2rem;">El carrito está vacío.</p>';
+            } else {
+                cart.forEach(item => {
+                    totalItems += item.qty;
+                    const subtotal = item.price * item.qty;
+                    totalPrice += subtotal;
+
+                    const div = document.createElement('div');
+                    div.className = 'cart-item';
+                    div.innerHTML = `
+                        <div>
+                            <h4>${item.name}</h4>
+                            <p style="color:#b8860b; font-weight:bold;">$${parseFloat(item.price).toFixed(2)}</p>
+                            <div class="cart-item-qty">
+                                <button class="btn-qty" onclick="changeQty('${item.code}', -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="btn-qty" onclick="changeQty('${item.code}', 1)">+</button>
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center;">
+                            <span style="font-weight:bold; margin-right:0.5rem;">$${subtotal.toFixed(2)}</span>
+                            <button class="btn-remove-item" onclick="removeItem('${item.code}')">&times;</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            count.textContent = totalItems;
+            total.textContent = `$${totalPrice.toFixed(2)}`;
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return alert('El carrito está vacío.');
+            let msg = "¡Hola *Calzados Antoine*! Quisiera realizar el siguiente pedido:\n\n";
+            let total = 0;
+
+            cart.forEach(i => {
+                const sub = i.price * i.qty;
+                total += sub;
+                msg += `• *${i.name}* (Cód: ${i.code})\n  Cant: ${i.qty} x $${parseFloat(i.price).toFixed(2)} = $${sub.toFixed(2)}\n`;
+            });
+
+            msg += `\n*Total a pagar: $${total.toFixed(2)}*`;
+            window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        /* Lógica del Panel Administrador */
+        function openAdminAuth() {
+            const pwd = prompt("Introduce la clave de administración (Por defecto: 1234):");
+            if (pwd === ADMIN_PASSWORD) {
+                renderAdminTable();
+                document.getElementById('admin-modal').classList.add('active');
+            } else if (pwd !== null) {
+                alert("Clave incorrecta.");
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.remove('active');
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('admin-table-body');
+            const search = document.getElementById('admin-search').value.toLowerCase();
+            tbody.innerHTML = '';
+
+            const list = products.filter(p => p.name.toLowerCase().includes(search) || p.code.toLowerCase().includes(search));
+
+            list.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${p.code}</strong></td>
+                    <td><img src="${p.img}" width="40" height="40" style="object-fit:cover; border-radius:4px;"></td>
+                    <td>${p.name}</td>
+                    <td>$${parseFloat(p.price).toFixed(2)}</td>
+                    <td>
+                        <button class="btn-edit-item" onclick="openProductForm('${p.code}')">Editar</button>
+                        <button class="btn-delete-item" onclick="deleteProduct('${p.code}')">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openProductForm(code) {
+            const form = document.getElementById('product-form');
+            form.reset();
+
+            if (code) {
+                const p = products.find(prod => prod.code === code);
+                document.getElementById('form-title').textContent = "Editar Producto";
+                document.getElementById('form-code-orig').value = p.code;
+                document.getElementById('form-code').value = p.code;
+                document.getElementById('form-name').value = p.name;
+                document.getElementById('form-price').value = p.price;
+                document.getElementById('form-gender').value = p.gender || "Mujer";
+                document.getElementById('form-img').value = p.img;
+                document.getElementById('form-desc').value = p.description || "";
+            } else {
+                document.getElementById('form-title').textContent = "Nuevo Producto";
+                document.getElementById('form-code-orig').value = "";
+            }
+
+            document.getElementById('form-modal').classList.add('active');
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const origCode = document.getElementById('form-code-orig').value;
+            const newCode = document.getElementById('form-code').value.trim();
+
+            const pData = {
+                code: newCode,
+                name: document.getElementById('form-name').value.trim(),
+                price: parseFloat(document.getElementById('form-price').value),
+                gender: document.getElementById('form-gender').value,
+                img: document.getElementById('form-img').value.trim(),
+                description: document.getElementById('form-desc').value.trim(),
+                category: "Calzado",
+                brand: "Antoine"
+            };
+
+            if (origCode) {
+                const idx = products.findIndex(p => p.code === origCode);
+                if (idx > -1) products[idx] = pData;
+            } else {
+                products.push(pData);
+            }
+
+            saveToLocalStorage();
+            filteredList = [...products];
+            renderProducts();
+            renderAdminTable();
+
+            document.getElementById('form-modal').classList.remove('active');
+            alert("¡Producto guardado exitosamente!");
+        }
+
+        function deleteProduct(code) {
+            if (confirm(`¿Estás seguro de eliminar el producto con código ${code}?`)) {
+                products = products.filter(p => p.code !== code);
+                saveToLocalStorage();
+                filteredList = [...products];
+                renderProducts();
+                renderAdminTable();
+            }
+        }
+
+        // Inicialización
+        initData();
+    </script>
+</body>
+</html>
